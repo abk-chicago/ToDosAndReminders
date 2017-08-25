@@ -1,7 +1,9 @@
 package com.example.akime.todosandreminders;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayAdapter<String> aTodoAdapter;
     ListView lvItems;
     EditText etEditText;
+    Intent editTextIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         populateArrayItems();
         lvItems.setAdapter(aTodoAdapter);
         etEditText = (EditText) findViewById(R.id.etEditText);
+        editTextIntent = new Intent(this, EditItemActivity.class);
         lvItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -37,6 +41,16 @@ public class MainActivity extends AppCompatActivity {
                 writeItems();
                 return true;
             }
+        });
+
+        lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                editTextIntent.putExtra("position", position);
+                startActivity(editTextIntent);
+
+            }
+
         });
     }
 
@@ -65,13 +79,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-       // getMenuInflater().inflate(R.menu_main,menu);
-    return true;
-    }
-
 
     public void onAddItem(View view) {
         aTodoAdapter.add(etEditText.getText().toString());

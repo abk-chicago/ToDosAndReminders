@@ -3,4 +3,5 @@
     <string name="app_title_bar">To Do\'s And Reminders</string>
     <string name="add">Add</string>
     <string name="add_item">Add an Item...</string>
+    <string name="instruct">Click to edit, long press to delete items.</string>
 </resources>
