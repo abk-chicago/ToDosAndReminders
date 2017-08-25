@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     EditText etEditText;
     Intent editTextIntent;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,13 +47,23 @@ public class MainActivity extends AppCompatActivity {
         lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                editTextIntent.putExtra("position", position);
-                startActivity(editTextIntent);
-
+                String listItem = todoItems.get(position).toString();
+                launchEditActivity();
             }
 
         });
     }
+
+
+    public void launchEditActivity() {
+        Intent editTextIntent = new Intent(MainActivity.this, EditItemActivity.class);
+        // put "extras" into the bundle for access in the second activity
+        editTextIntent.putExtra("toEdit", "listItem");
+        // brings up the second activity
+        startActivity(editTextIntent);
+
+    }
+
 
     public void populateArrayItems() {
         todoItems = new ArrayList<String>();

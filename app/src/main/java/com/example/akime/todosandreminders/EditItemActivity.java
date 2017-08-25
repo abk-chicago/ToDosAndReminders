@@ -9,28 +9,26 @@ import android.widget.Button;
 import android.widget.EditText;
 
 public class EditItemActivity extends AppCompatActivity {
+    Button btnEditSubmit;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_item);
-        final Intent backToMainActivityIntent;
-        Button btnEditSubmit;
         EditText etMultiLine = (EditText) findViewById(R.id.etEditTextMultiline);
-        btnEditSubmit = (Button) findViewById(R.id.btnEditSubmit);
-        backToMainActivityIntent = new Intent(this, MainActivity.class);
+        btnEditSubmit = (Button) findViewById(R.id.btnSave);
 
-//  need to make this work
+        String editable = getIntent().getStringExtra("editable");
+        int position = getIntent().getIntExtra("position", 0);
 
-        Intent i = getIntent();
-        final String editedItem = getIntent().getStringExtra("editPosition");
-        final int position = i.getIntExtra("position", 0);
 
         btnEditSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                //code here
-                backToMainActivityIntent.putExtra("position",editedItem);
+                Intent backToMainActivityIntent = new Intent(EditItemActivity.this, MainActivity.class);
+                backToMainActivityIntent.putExtra("position", 0);
                 startActivity(backToMainActivityIntent);
 
 //  need to make this work
