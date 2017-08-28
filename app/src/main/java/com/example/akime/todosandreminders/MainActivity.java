@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     ListView lvItems;
     EditText etEditText;
     Intent editTextIntent;
+    private final int REQUEST_CODE = 20;
 
 
     @Override
@@ -47,21 +48,32 @@ public class MainActivity extends AppCompatActivity {
         lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String listItem = todoItems.get(position).toString();
-                launchEditActivity();
+                final String listItem = todoItems.get(position);
+                editTextIntent.putExtra("listItem",listItem);
+                editTextIntent.putExtra("position",position);
+                startActivityForResult(editTextIntent, REQUEST_CODE);
             }
 
         });
+
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+
+            String editedItem = data.getExtras().getString("editedItem");
+//            int code = data.getExtras().getInt("code", 0);
+
+        }
+    }
+
 
 
     public void launchEditActivity() {
         Intent editTextIntent = new Intent(MainActivity.this, EditItemActivity.class);
-        // put "extras" into the bundle for access in the second activity
         editTextIntent.putExtra("toEdit", "listItem");
-        // brings up the second activity
         startActivity(editTextIntent);
-
     }
 
 

@@ -10,6 +10,7 @@ import android.widget.EditText;
 
 public class EditItemActivity extends AppCompatActivity {
     Button btnEditSubmit;
+    String itemToEdit;
 
 
     @Override
@@ -19,29 +20,24 @@ public class EditItemActivity extends AppCompatActivity {
         EditText etMultiLine = (EditText) findViewById(R.id.etEditTextMultiline);
         btnEditSubmit = (Button) findViewById(R.id.btnSave);
 
-        String editable = getIntent().getStringExtra("editable");
-        int position = getIntent().getIntExtra("position", 0);
+        itemToEdit = getIntent().getStringExtra("listItem");
+        etMultiLine.setText(itemToEdit);
+        final int position = getIntent().getIntExtra("position", 0);
 
 
         btnEditSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               //code here
-                Intent backToMainActivityIntent = new Intent(EditItemActivity.this, MainActivity.class);
-                backToMainActivityIntent.putExtra("position", 0);
-                startActivity(backToMainActivityIntent);
-
-//  need to make this work
-
+                onSubmit(btnEditSubmit);
             }
         });
-
-
-
-
     }
 
     public void onSubmit(View v) {
+        Intent data = new Intent(EditItemActivity.this, MainActivity.class);
+        data.putExtra("editedItem", 0);
+        setResult(RESULT_OK, data);
+        startActivity(data);
         this.finish();
     }
 
