@@ -86,10 +86,6 @@ public class MainActivity extends AppCompatActivity {
         File filesDir = getFilesDir();
         File file = new File(filesDir, "todo.txt");
         try {
-
-            if (file.exists()){
-                file.delete();
-            }
             FileUtils.writeLines(file, mTodoItems);
 
         } catch (IOException e) {
@@ -104,18 +100,59 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.i("lihla", "onActivityResult : "+requestCode+", "+resultCode);
+    protected void onResume() {
+        Log.i("lihla", "onResume called ***** ");
+        super.onResume();
 
-        // REQUEST_CODE is defined above
+
+        mLvItems = (ListView) findViewById(R.id.lvItems);
+        populateArrayItems();
+        mLvItems.setAdapter(mTodoAdapter);
+
+        mEditText = (EditText) findViewById(R.id.etEditText);
+        mIntent = new Intent(this, EditItemActivity.class);
+
+        mLvItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                mTodoItems.remove(position);
+                mTodoAdapter.notifyDataSetChanged();
+                writeItems();
+                return true;
+            }
+        });
+
+        mLvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mLvItem = mTodoItems.get(position);
+
+                mIntent.putExtra("listItem", mLvItem);
+                Log.i("lihla", "ResumeO-listItem = " + mLvItem);
+
+                mIntent.putExtra("position", position);
+                Log.i("lihla", "Resume-position = " + position);
+                startActivityForResult(mIntent, REQUEST_CODE);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i("lihla", "onActivityResult method called: "+requestCode+", "+resultCode);
+
+
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
             Log.i("lihla", "onActivityResult 1");
             mLvItem = data.getExtras().getString("listItem");
             mPosition = data.getExtras().getInt("position");
-            Log.i("lihla", "onActivityResult 2 : **** item brought back is "+ mLvItem + " + position "+ mPosition+ "************");
-
+            Log.i("lihla", "onActivityResult 2 : **** item brought back is "+ mLvItem + " at position "+ mPosition+ "************");
+            mTodoAdapter.add(mLvItem);
+            writeItems();
             // Toast the name to display temporarily on screen
-            Toast.makeText(this, mEditable, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, mLvItem, Toast.LENGTH_SHORT).show();
         }
+
+
     }
 }
