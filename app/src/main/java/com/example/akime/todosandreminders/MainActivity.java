@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mLvItems = (ListView) findViewById(R.id.lvItems);
+
+        writeItems();
         populateArrayItems();
         mLvItems.setAdapter(mTodoAdapter);
 
@@ -147,7 +149,8 @@ public class MainActivity extends AppCompatActivity {
             mLvItem = data.getExtras().getString("listItem");
             mPosition = data.getExtras().getInt("position");
             Log.i("lihla", "onActivityResult 2 : **** item brought back is "+ mLvItem + " at position "+ mPosition+ "************");
-            mTodoAdapter.add(mLvItem);
+            mTodoItems.set(mPosition, mLvItem);
+            mTodoAdapter.notifyDataSetChanged();
             writeItems();
             // Toast the name to display temporarily on screen
             Toast.makeText(this, mLvItem, Toast.LENGTH_SHORT).show();
